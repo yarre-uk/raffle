@@ -1,6 +1,9 @@
-import { useAccount } from 'wagmi';
+import { useAccount, useReadContract } from 'wagmi';
 
+import { abi } from './abi';
 import { Account } from './account';
+import { contractAddresses } from './constants';
+import { Initialize } from './initialize';
 import { WalletOptions } from './wallet-options';
 
 const ConnectWallet = () => {
@@ -10,10 +13,24 @@ const ConnectWallet = () => {
 };
 
 const App = () => {
+  const { data: pool } = useReadContract({
+    abi,
+    address: contractAddresses,
+    functionName: 'pool',
+  });
+
+  const { data: vrfCoordinator } = useReadContract({
+    abi,
+    address: contractAddresses,
+    functionName: 's_vrfCoordinator',
+  });
+
   return (
     <div className="text-red p-1">
       <ConnectWallet />
-      <p className="text-red-500">asdasd</p>
+      <Initialize />
+      <p>pool: {pool?.toString()}</p>
+      <p>vrfCoordinator: {vrfCoordinator}</p>
     </div>
   );
 };
