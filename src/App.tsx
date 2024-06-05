@@ -1,35 +1,25 @@
-import { useAccount, useReadContract } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
-import { abi } from './abi';
-import { Account } from './account';
-import { contractAddresses } from './constants';
-import { Initialize } from './initialize';
-import { WalletOptions } from './wallet-options';
-
-const ConnectWallet = () => {
-  const { isConnected } = useAccount();
-  if (isConnected) return <Account />;
-  return <WalletOptions />;
-};
+import { abi, proxyAddress } from './constants';
+import { Profile } from './features';
 
 const App = () => {
   const { data: pool } = useReadContract({
     abi,
-    address: contractAddresses,
+    address: proxyAddress,
     functionName: 'pool',
   });
 
   const { data: vrfCoordinator } = useReadContract({
     abi,
-    address: contractAddresses,
+    address: proxyAddress,
     functionName: 's_vrfCoordinator',
   });
 
   return (
-    <div className="text-red p-1">
-      <ConnectWallet />
-      <Initialize />
-      <p>pool: {pool?.toString()}</p>
+    <div className="h-screen w-screen p-1">
+      <Profile />
+      <p className="text-3xl">pool: {pool?.toString()}</p>
       <p>vrfCoordinator: {vrfCoordinator}</p>
     </div>
   );

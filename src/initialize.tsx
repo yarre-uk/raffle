@@ -8,7 +8,7 @@ import {
   useWriteContract,
 } from 'wagmi';
 
-import { abi } from './abi';
+import { abi } from './constants/abi';
 
 const usdt = '0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0';
 const usdc = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238';
