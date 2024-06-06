@@ -12,6 +12,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
+    "sourceMap": true,
     /* Linting */
     "strict": false,
     "noUnusedLocals": true,

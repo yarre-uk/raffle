@@ -1,26 +1,23 @@
-import { useReadContract } from 'wagmi';
+import { useAccount } from 'wagmi';
 
-import { abi, proxyAddress } from './constants';
-import { Profile } from './features';
+import { Card } from './components';
+import { Play, Profile } from './features';
 
 const App = () => {
-  const { data: pool } = useReadContract({
-    abi,
-    address: proxyAddress,
-    functionName: 'pool',
-  });
+  const { isConnected } = useAccount();
 
-  const { data: vrfCoordinator } = useReadContract({
-    abi,
-    address: proxyAddress,
-    functionName: 's_vrfCoordinator',
-  });
+  // const { data: pool } = useReadContract({
+  //   abi,
+  //   address: proxyAddress,
+  //   functionName: 'pool',
+  // });
 
   return (
-    <div className="h-screen w-screen p-1">
-      <Profile />
-      <p className="text-3xl">pool: {pool?.toString()}</p>
-      <p>vrfCoordinator: {vrfCoordinator}</p>
+    <div className="flex h-screen w-screen items-center justify-center">
+      <Card className="flex min-h-[80%] w-[80%] flex-col items-center justify-center gap-12 p-8">
+        <Profile />
+        {isConnected && <Play />}
+      </Card>
     </div>
   );
 };
