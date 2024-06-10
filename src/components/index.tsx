@@ -32,3 +32,4 @@ export {
   FormMessage,
   FormField,
 } from './form';
+export { RadioGroup, RadioGroupItem } from './radio-group';

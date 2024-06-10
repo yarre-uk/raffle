@@ -1,4 +1,4 @@
-export const abi = [
+export const proxyAbi = [
   {
     inputs: [
       {
@@ -278,6 +278,19 @@ export const abi = [
   },
   {
     inputs: [],
+    name: 'depositState',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: 'lastDepositId',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'forwarderAddress',
     outputs: [
       {
@@ -321,9 +334,9 @@ export const abi = [
         type: 'address',
       },
       {
-        internalType: 'uint64',
+        internalType: 'uint256',
         name: '_subscriptionId',
-        type: 'uint64',
+        type: 'uint256',
       },
       {
         internalType: 'bytes32',
@@ -470,6 +483,13 @@ export const abi = [
   },
   {
     inputs: [],
+    name: 'requestRandomWords',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 's_vrfCoordinator',
     outputs: [
       {
@@ -522,12 +542,38 @@ export const abi = [
   },
   {
     inputs: [],
+    name: 'startedAt',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'status',
     outputs: [
       {
         internalType: 'enum RaffleStatus',
         name: '',
         type: 'uint8',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'timeToClose',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -544,6 +590,25 @@ export const abi = [
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'whitelist',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {

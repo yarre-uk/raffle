@@ -1,2 +1,2 @@
-export { abi } from './abi';
-export { proxyAddress, tokenAddresses } from './addresses';
+export { proxyAbi } from './abi';
+export { proxyAddress, approvedTokens, approvedTokensInfo } from './addresses';
