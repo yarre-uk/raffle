@@ -59,15 +59,15 @@ export const proxyAbi = [
     inputs: [
       {
         indexed: true,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'raffleId',
+        type: 'uint256',
       },
       {
         indexed: true,
-        internalType: 'bytes32',
-        name: 'id',
-        type: 'bytes32',
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
       },
       {
         indexed: true,
@@ -76,37 +76,10 @@ export const proxyAbi = [
         type: 'bytes32',
       },
       {
-        components: [
-          {
-            internalType: 'uint256',
-            name: 'raffleId',
-            type: 'uint256',
-          },
-          {
-            internalType: 'address',
-            name: 'sender',
-            type: 'address',
-          },
-          {
-            internalType: 'uint256',
-            name: 'amount',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'point',
-            type: 'uint256',
-          },
-          {
-            internalType: 'bytes32',
-            name: 'prevDeposit',
-            type: 'bytes32',
-          },
-        ],
         indexed: false,
-        internalType: 'struct Deposit',
-        name: 'deposit',
-        type: 'tuple',
+        internalType: 'bytes32',
+        name: 'id',
+        type: 'bytes32',
       },
     ],
     name: 'Deposited',
@@ -305,6 +278,24 @@ export const proxyAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_requestId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_randomWords',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'fulfillRandomWordsTest',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'bytes32[]',
         name: '_ids',
         type: 'bytes32[]',
@@ -316,6 +307,98 @@ export const proxyAbi = [
         internalType: 'uint256',
         name: 'total',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: '_id',
+        type: 'bytes32',
+      },
+    ],
+    name: 'getDeposit',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'raffleId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'address',
+            name: 'sender',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'point',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bytes32',
+            name: 'prevDeposit',
+            type: 'bytes32',
+          },
+        ],
+        internalType: 'struct Deposit',
+        name: '',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32[]',
+        name: '_ids',
+        type: 'bytes32[]',
+      },
+    ],
+    name: 'getDeposits',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'raffleId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'address',
+            name: 'sender',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'point',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bytes32',
+            name: 'prevDeposit',
+            type: 'bytes32',
+          },
+        ],
+        internalType: 'struct Deposit[]',
+        name: '',
+        type: 'tuple[]',
       },
     ],
     stateMutability: 'view',

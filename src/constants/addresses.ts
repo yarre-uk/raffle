@@ -8,4 +8,6 @@ export const approvedTokensInfo = [
   { address: link, name: 'LINK', id: 1 },
 ];
 
-export const proxyAddress = '0x8aB7633cb0eE890Be63Ef431c59fe56F67851337';
+//TODO move to env
+export const proxyAddress: `0x${string}` =
+  '0xa818cA7A4869c7C7101d0Ea5E4c455Ef00e698d5';

@@ -1,8 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { erc20Abi } from 'viem';
 import {
   BaseError,
   useAccount,
+  usePublicClient,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
@@ -28,9 +30,14 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/components';
-import { proxyAbi, approvedTokensInfo, proxyAddress } from '@/constants';
+import {
+  proxyAbi,
+  approvedTokensInfo,
+  proxyAddress,
+  approvedTokens,
+} from '@/constants';
 
-const depositTypes = ['basic', 'permit'] as const;
+const depositTypes = ['basic', 'approve'] as const;
 
 const formSchema = z.object({
   type: z.enum(depositTypes, {
@@ -53,7 +60,14 @@ const DepositCard = () => {
   });
 
   const { address } = useAccount();
-  const { data: hash, error, writeContract } = useWriteContract();
+  const {
+    data: hash,
+    error,
+    writeContract,
+    writeContractAsync,
+  } = useWriteContract();
+
+  const publicClient = usePublicClient();
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
@@ -71,8 +85,20 @@ const DepositCard = () => {
     });
   };
 
-  const permitDeposit = async (data: z.infer<typeof formSchema>) => {
-    //permit
+  const approveDeposit = async (data: z.infer<typeof formSchema>) => {
+    const approveHash = await writeContractAsync({
+      address: approvedTokens[Number(data.token)],
+      abi: erc20Abi,
+      functionName: 'approve',
+      args: [proxyAddress, BigInt(data.token)],
+      chain: currentChain,
+      account: address,
+    });
+
+    await publicClient.waitForTransactionReceipt({
+      hash: approveHash,
+    });
+
     writeContract({
       address: proxyAddress,
       abi: proxyAbi,
@@ -88,8 +114,8 @@ const DepositCard = () => {
       case 'basic':
         basicDeposit(data);
         break;
-      case 'permit':
-        permitDeposit(data);
+      case 'approve':
+        approveDeposit(data);
         break;
     }
   };
