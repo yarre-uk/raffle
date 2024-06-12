@@ -202,7 +202,7 @@ const DepositCard = () => {
         {isConfirming && <div>Waiting for confirmation...</div>}
         {isConfirmed && <div>Transaction confirmed.</div>}
         {error && (
-          <div>Error: {(error as BaseError).message || error.message}</div>
+          <div>Error: {(error as BaseError).shortMessage || error.message}</div>
         )}
       </form>
     </Form>

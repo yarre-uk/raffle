@@ -1,5 +1,5 @@
-const weth = '0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9';
-const link = '0x779877A7B0D9E8603169DdbD7836e478b4624789';
+export const weth = '0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9';
+export const link = '0x779877A7B0D9E8603169DdbD7836e478b4624789';
 
 export const approvedTokens: `0x${string}`[] = [weth, link];
 
@@ -10,4 +10,4 @@ export const approvedTokensInfo = [
 
 //TODO move to env
 export const proxyAddress: `0x${string}` =
-  '0xa818cA7A4869c7C7101d0Ea5E4c455Ef00e698d5';
+  '0x54F7AA70825fE89097485C026aA81caEBA0b8844';

@@ -4,15 +4,16 @@ import { usePublicClient } from 'wagmi';
 import { wagmiConfig } from 'wagmiConfig';
 
 import { proxyAddress, proxyAbi } from '@/constants';
+import { DepositData, DepositEvent, FullDepositEvent } from '@/types';
 
-const useGetEvents = () => {
+const useGetDepositEvents = () => {
   const publicClient = usePublicClient();
 
-  const fetchEvents = async (args: {
+  const fetchDeposits = async (args: {
     raffleId?: bigint | bigint[];
     sender?: `0x${string}` | `0x${string}`[];
     prevDeposit?: `0x${string}` | `0x${string}`[];
-  }) => {
+  }): Promise<FullDepositEvent[]> => {
     const block = await publicClient.getBlock();
     const logs = await publicClient.getLogs({
       address: proxyAddress,
@@ -24,7 +25,7 @@ const useGetEvents = () => {
       toBlock: block.number,
     });
 
-    const events = logs.map(
+    const events: DepositEvent[] = logs.map(
       (log) =>
         decodeEventLog({
           abi: proxyAbi,
@@ -32,12 +33,12 @@ const useGetEvents = () => {
         }).args,
     );
 
-    const deposits = await readContract(wagmiConfig, {
+    const deposits = (await readContract(wagmiConfig, {
       abi: proxyAbi,
       address: proxyAddress,
       functionName: 'getDeposits',
       args: [events.map((event) => event.id)],
-    });
+    })) as DepositData[];
 
     return events.map((event, index) => {
       return {
@@ -47,7 +48,7 @@ const useGetEvents = () => {
     });
   };
 
-  return fetchEvents;
+  return fetchDeposits;
 };
 
-export default useGetEvents;
+export default useGetDepositEvents;

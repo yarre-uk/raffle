@@ -1,12 +1,13 @@
 import { useAccount, useReadContract } from 'wagmi';
 
-import useGetEvents from './useGetEvents';
+import useGetDepositEvents from './useGetDepositEvents';
 
 import { proxyAddress, proxyAbi } from '@/constants';
+import { FullDepositEvent } from '@/types';
 
 const useWinner = () => {
   const { address: account } = useAccount();
-  const fetchEvents = useGetEvents();
+  const fetchDeposits = useGetDepositEvents();
 
   const { data: status } = useReadContract({
     address: proxyAddress,
@@ -22,7 +23,7 @@ const useWinner = () => {
     functionName: 'raffleId',
   });
 
-  const { data: randomWords } = useReadContract({
+  const { data: randomNumber } = useReadContract({
     address: proxyAddress,
     abi: proxyAbi,
     account,
@@ -30,25 +31,40 @@ const useWinner = () => {
     args: [0n],
   });
 
-  const getWinnerData = async () => {
-    if (status !== 2) {
+  const getWinnerData = async (): Promise<{
+    winner: FullDepositEvent;
+    proof: FullDepositEvent;
+    randomNumber: bigint;
+  }> => {
+    if (!status) {
       return;
     }
 
-    const userDeposits = await fetchEvents({ raffleId, sender: account });
+    if (status !== 2) {
+      console.error('Raffle is not finished');
+      return;
+    }
+
+    const userDeposits = await fetchDeposits({ raffleId });
 
     const winnerDepositData = userDeposits.reduce((acc, data) => {
-      return data.deposit.point < randomWords ? data : acc;
+      return data.deposit.point < randomNumber ? data : acc;
     }, null);
 
-    const nextDepositData = await fetchEvents({
-      prevDeposit: winnerDepositData.event.id,
-    });
+    const nextDepositData = (
+      await fetchDeposits({
+        prevDeposit: winnerDepositData.event.id,
+      })
+    )[0];
 
-    return [winnerDepositData, nextDepositData];
+    return {
+      winner: winnerDepositData,
+      proof: nextDepositData,
+      randomNumber,
+    };
   };
 
-  return getWinnerData;
+  return { getWinnerData };
 };
 
 export default useWinner;

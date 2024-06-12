@@ -36,19 +36,30 @@ const GameInfo = () => {
     functionName: 'timeToClose',
   });
 
-  const timeStamp = Number(blockInfo?.data?.timestamp);
+  if (
+    !blockInfo ||
+    status == undefined ||
+    pool == undefined ||
+    startedAt == undefined ||
+    timeToClose == undefined
+  ) {
+    return null;
+  }
 
-  const secondsLeft = Number(startedAt + timeToClose) - timeStamp;
+  const timeStamp = Number(blockInfo?.data?.timestamp);
+  const endsBy = Number(startedAt) + Number(timeToClose);
 
   return (
-    <Card className="flex w-[80%] flex-col items-center justify-center gap-12 p-8">
-      <p>Status: {statuses[status]}</p>
-      <p>Pool {`${pool}`}</p>
-      {secondsLeft > 0 ? (
-        <p>Seconds left: {secondsLeft}</p>
-      ) : (
-        <p>Time is up!</p>
-      )}
+    <Card className="grid w-[80%] grid-cols-2 items-center justify-center p-8">
+      <div className="flex flex-col items-center justify-center">
+        <p>Status: {statuses[status]}</p>
+        <p>Pool: {`${pool}`}</p>
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <p>Started at: {new Date(Number(startedAt) * 1000).toLocaleString()}</p>
+        <p>Ends by: {new Date(endsBy * 1000).toLocaleString()}</p>
+        <p>Current block time: {new Date(timeStamp * 1000).toLocaleString()}</p>
+      </div>
     </Card>
   );
 };
