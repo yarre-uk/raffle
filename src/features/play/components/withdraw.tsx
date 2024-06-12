@@ -10,17 +10,23 @@ import { currentChain } from 'wagmiConfig';
 
 import { Button } from '@/components';
 import { proxyAbi, proxyAddress } from '@/constants';
+import useGetDepositEvents from '@/hooks/useGetDepositEvents';
 import useWinner from '@/hooks/useWinner';
 import { FullDepositEvent } from '@/types';
 
 const WithdrawCard = () => {
   const { address: account } = useAccount();
-  const { getWinnerData } = useWinner();
+  const { data: hash, error, writeContract } = useWriteContract();
+
+  const { getWinnerData, calculateChance } = useWinner();
+  const fetchDeposits = useGetDepositEvents();
+
   const [winnerData, setWinnerData] = useState<{
     winner: FullDepositEvent;
     proof: FullDepositEvent;
     randomNumber: bigint;
   }>(null);
+  const [chance, setChance] = useState<number>(0);
 
   const { data: pool } = useReadContract({
     abi: proxyAbi,
@@ -28,16 +34,26 @@ const WithdrawCard = () => {
     functionName: 'pool',
   });
 
-  const { data: hash, error, writeContract } = useWriteContract();
+  const { data: owner } = useReadContract({
+    address: proxyAddress,
+    abi: proxyAbi,
+    account,
+    functionName: 'owner',
+  });
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
 
-  const handleRefetch = async () => {
-    const _winnerData = await getWinnerData();
-    setWinnerData(_winnerData);
+  const handleRefetch = () => {
+    getWinnerData().then(setWinnerData);
+    calculateChance(Number(pool)).then(setChance);
+  };
+
+  const handleDebug = async () => {
+    const logs = await fetchDeposits({});
+    console.log(logs);
   };
 
   const handleWithdraw = () => {
@@ -90,9 +106,15 @@ const WithdrawCard = () => {
           </>
         </>
       )}
+      {chance && <p>Chance: {chance.toFixed(3)}%</p>}
       <Button className="w-full" onClick={handleRefetch}>
         Refetch Data
       </Button>
+      {account == owner && (
+        <Button className="w-full" onClick={handleDebug}>
+          Debug
+        </Button>
+      )}
       <Button
         disabled={account != winnerData?.winner.deposit.sender}
         className="w-full"
@@ -100,6 +122,7 @@ const WithdrawCard = () => {
       >
         Withdraw
       </Button>
+
       {hash && <div>Transaction Hash: {hash}</div>}
       {isConfirming && <div>Waiting for confirmation...</div>}
       {isConfirmed && <div>Transaction confirmed.</div>}

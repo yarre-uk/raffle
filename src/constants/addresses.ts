@@ -9,5 +9,5 @@ export const approvedTokensInfo = [
 ];
 
 //TODO move to env
-export const proxyAddress: `0x${string}` = import.meta.env
-  .PROXY_CONTRACT_ADDRESS;
+export const proxyAddress: `0x${string}` =
+  '0x029eA2C522E88A82FDeb881D9cd3576c30eC3F38';

@@ -13,4 +13,4 @@ export const wagmiConfig = createConfig({
   },
 });
 
-export const currentChain = localhost;
+export const currentChain = sepolia;

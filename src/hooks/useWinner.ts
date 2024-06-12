@@ -64,7 +64,28 @@ const useWinner = () => {
     };
   };
 
-  return { getWinnerData };
+  const calculateChance = async (pool: number) => {
+    if (!status) {
+      return;
+    }
+
+    if (status !== 2) {
+      console.error('Raffle is not finished');
+      return;
+    }
+
+    const events = await fetchDeposits({ sender: account });
+
+    let sum = 0;
+
+    for (const event of events) {
+      sum += Number(event.deposit.amount);
+    }
+
+    return (sum / Number(pool)) * 100;
+  };
+
+  return { getWinnerData, calculateChance };
 };
 
 export default useWinner;

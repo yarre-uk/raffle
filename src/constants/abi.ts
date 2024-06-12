@@ -211,7 +211,7 @@ export const proxyAbi = [
     inputs: [
       {
         internalType: 'bytes',
-        name: '_checkData',
+        name: '',
         type: 'bytes',
       },
     ],
@@ -273,24 +273,6 @@ export const proxyAbi = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_requestId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256[]',
-        name: '_randomWords',
-        type: 'uint256[]',
-      },
-    ],
-    name: 'fulfillRandomWordsTest',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -454,7 +436,7 @@ export const proxyAbi = [
     inputs: [
       {
         internalType: 'bytes',
-        name: '_performData',
+        name: '',
         type: 'bytes',
       },
     ],
@@ -560,13 +542,6 @@ export const proxyAbi = [
       },
     ],
     name: 'rawFulfillRandomWords',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'requestRandomWords',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

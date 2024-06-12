@@ -36,6 +36,12 @@ const GameInfo = () => {
     functionName: 'timeToClose',
   });
 
+  const { data: owner } = useReadContract({
+    abi: proxyAbi,
+    address: proxyAddress,
+    functionName: 'owner',
+  });
+
   if (
     !blockInfo ||
     status == undefined ||
@@ -52,11 +58,15 @@ const GameInfo = () => {
   return (
     <Card className="grid w-[80%] grid-cols-2 items-center justify-center p-8">
       <div className="flex flex-col items-center justify-center">
-        <p>Status: {statuses[status]}</p>
+        <p>Contact status: {statuses[status]}</p>
         <p>Pool: {`${pool}`}</p>
+        <p>Owner: {`${owner}`}</p>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <p>Started at: {new Date(Number(startedAt) * 1000).toLocaleString()}</p>
+        <p>
+          Able to deposit:{' '}
+          {startedAt + BigInt(endsBy) < timeStamp ? 'Yes' : 'No'}
+        </p>
         <p>Ends by: {new Date(endsBy * 1000).toLocaleString()}</p>
         <p>Current block time: {new Date(timeStamp * 1000).toLocaleString()}</p>
       </div>
