@@ -52,7 +52,7 @@ const WithdrawCard = () => {
   };
 
   const handleDebug = async () => {
-    const logs = await fetchDeposits({});
+    const logs = await fetchDeposits({ raffleId: 0n });
     console.log(logs);
   };
 
@@ -96,7 +96,7 @@ const WithdrawCard = () => {
               winnerData.proof?.deposit.point || pool
             }`}
           </p>
-          <p>Lucky number: {winnerData.randomNumber.toString()}</p>
+          <p>Lucky number: {`${winnerData.randomNumber % pool}`}</p>
           <>
             {account == winnerData.winner?.deposit.sender ? (
               <p>You are the winner</p>

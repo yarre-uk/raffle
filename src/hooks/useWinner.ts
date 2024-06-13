@@ -16,6 +16,12 @@ const useWinner = () => {
     functionName: 'status',
   });
 
+  const { data: pool } = useReadContract({
+    abi: proxyAbi,
+    address: proxyAddress,
+    functionName: 'pool',
+  });
+
   const { data: raffleId } = useReadContract({
     address: proxyAddress,
     abi: proxyAbi,
@@ -45,10 +51,12 @@ const useWinner = () => {
       return;
     }
 
+    const luckyNumber = randomNumber % pool;
+
     const userDeposits = await fetchDeposits({ raffleId });
 
     const winnerDepositData = userDeposits.reduce((acc, data) => {
-      return data.deposit.point < randomNumber ? data : acc;
+      return data.deposit.point < luckyNumber ? data : acc;
     }, null);
 
     const nextDepositData = (

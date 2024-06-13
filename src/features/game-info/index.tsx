@@ -65,9 +65,14 @@ const GameInfo = () => {
       <div className="flex flex-col items-center justify-center">
         <p>
           Able to deposit:{' '}
-          {startedAt + BigInt(endsBy) < timeStamp ? 'Yes' : 'No'}
+          {startedAt + BigInt(endsBy) < timeStamp || status === 0
+            ? 'Yes'
+            : 'No'}
         </p>
-        <p>Ends by: {new Date(endsBy * 1000).toLocaleString()}</p>
+        <p>
+          Ends by:{' '}
+          {status === 1 ? new Date(endsBy * 1000).toLocaleString() : '---'}
+        </p>
         <p>Current block time: {new Date(timeStamp * 1000).toLocaleString()}</p>
       </div>
     </Card>

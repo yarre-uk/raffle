@@ -21,7 +21,7 @@ const useGetDepositEvents = () => {
         `event Deposited(uint256 indexed raffleId, address indexed sender, bytes32 indexed prevDeposit, bytes32 id)`,
       ),
       args,
-      fromBlock: block.number - 999n,
+      fromBlock: block.number - 99999n,
       toBlock: block.number,
     });
 
