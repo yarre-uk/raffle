@@ -82,7 +82,7 @@ const useWinner = () => {
       return;
     }
 
-    const events = await fetchDeposits({ sender: account });
+    const events = await fetchDeposits({ sender: account, raffleId });
 
     let sum = 0;
 

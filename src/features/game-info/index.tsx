@@ -55,6 +55,8 @@ const GameInfo = () => {
   const timeStamp = Number(blockInfo?.data?.timestamp);
   const endsBy = Number(startedAt) + Number(timeToClose);
 
+  console.log('status ->', status);
+
   return (
     <Card className="grid w-[80%] grid-cols-2 items-center justify-center p-8">
       <div className="flex flex-col items-center justify-center">
@@ -65,7 +67,8 @@ const GameInfo = () => {
       <div className="flex flex-col items-center justify-center">
         <p>
           Able to deposit:{' '}
-          {startedAt + BigInt(endsBy) < timeStamp || status === 0
+          {startedAt + BigInt(endsBy) > timeStamp &&
+          (status === 0 || status === 1)
             ? 'Yes'
             : 'No'}
         </p>

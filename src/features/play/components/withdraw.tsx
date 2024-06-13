@@ -17,6 +17,7 @@ import { FullDepositEvent } from '@/types';
 const WithdrawCard = () => {
   const { address: account } = useAccount();
   const { data: hash, error, writeContract } = useWriteContract();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { getWinnerData, calculateChance } = useWinner();
   const fetchDeposits = useGetDepositEvents();
@@ -47,8 +48,11 @@ const WithdrawCard = () => {
     });
 
   const handleRefetch = () => {
-    getWinnerData().then(setWinnerData);
-    calculateChance(Number(pool)).then(setChance);
+    setIsLoading(true);
+    getWinnerData()
+      .then(setWinnerData)
+      .then(() => calculateChance(Number(pool)).then(setChance))
+      .then(() => setIsLoading(false));
   };
 
   const handleDebug = async () => {
@@ -82,6 +86,10 @@ const WithdrawCard = () => {
   useEffect(() => {
     handleRefetch();
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex w-full flex-col gap-4">
