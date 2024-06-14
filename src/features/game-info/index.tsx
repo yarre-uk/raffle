@@ -67,7 +67,7 @@ const GameInfo = () => {
       <div className="flex flex-col items-center justify-center">
         <p>
           Able to deposit:{' '}
-          {startedAt + BigInt(endsBy) > timeStamp &&
+          {startedAt + BigInt(endsBy) < timeStamp &&
           (status === 0 || status === 1)
             ? 'Yes'
             : 'No'}
