@@ -112,7 +112,9 @@ const ApproveCard = () => {
           )}
         />
         <Button type="submit">Submit</Button>
-        <Allowance tokenId={+form.watch('token')} />
+        {address && (
+          <Allowance tokenId={+form.getValues().token} address={address} />
+        )}
         {hash && <div>Transaction Hash: {hash}</div>}
         {isConfirming && <div>Waiting for confirmation...</div>}
         {isConfirmed && <div>Transaction confirmed.</div>}

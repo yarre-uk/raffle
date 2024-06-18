@@ -26,7 +26,7 @@ const WithdrawCard = () => {
     winner: FullDepositEvent;
     proof: FullDepositEvent;
     randomNumber: bigint;
-  }>(null);
+  } | null>(null);
   const [chance, setChance] = useState<number>(0);
 
   const { data: pool } = useReadContract({
@@ -61,6 +61,10 @@ const WithdrawCard = () => {
   };
 
   const handleWithdraw = () => {
+    if (!winnerData) {
+      return;
+    }
+
     if (!winnerData.proof) {
       writeContract({
         account,
@@ -87,7 +91,7 @@ const WithdrawCard = () => {
     handleRefetch();
   }, []);
 
-  if (isLoading) {
+  if (isLoading || !pool) {
     return <div>Loading...</div>;
   }
 

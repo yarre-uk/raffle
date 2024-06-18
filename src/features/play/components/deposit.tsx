@@ -95,6 +95,10 @@ const DepositCard = () => {
       account: address,
     });
 
+    if (!publicClient || !approveHash) {
+      throw new Error('Something went wrong');
+    }
+
     await publicClient.waitForTransactionReceipt({
       hash: approveHash,
     });

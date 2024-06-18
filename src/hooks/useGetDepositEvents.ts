@@ -14,6 +14,10 @@ const useGetDepositEvents = () => {
     sender?: `0x${string}` | `0x${string}`[];
     prevDeposit?: `0x${string}` | `0x${string}`[];
   }): Promise<FullDepositEvent[]> => {
+    if (!publicClient) {
+      throw new Error('Public client not initialized');
+    }
+
     const block = await publicClient.getBlock();
     const logs = await publicClient.getLogs({
       address: proxyAddress,

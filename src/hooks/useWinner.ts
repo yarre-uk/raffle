@@ -12,7 +12,6 @@ const useWinner = () => {
   const { data: status } = useReadContract({
     address: proxyAddress,
     abi: proxyAbi,
-    account,
     functionName: 'status',
   });
 
@@ -25,39 +24,61 @@ const useWinner = () => {
   const { data: raffleId } = useReadContract({
     address: proxyAddress,
     abi: proxyAbi,
-    account,
     functionName: 'raffleId',
   });
 
   const { data: randomNumber } = useReadContract({
     address: proxyAddress,
     abi: proxyAbi,
-    account,
     functionName: 'randomWords',
     args: [0n],
   });
+
+  // const asd = {
+  //   address: proxyAddress,
+  //   abi: proxyAbi,
+  // } as const;
+
+  // const zxc = {
+  //   ...asd,
+  //   functionName: 'randomWords',
+  //   args: [0n],
+  // } as const;
+
+  // useReadContracts({
+  //   contracts: [zxc],
+  // });
 
   const getWinnerData = async (): Promise<{
     winner: FullDepositEvent;
     proof: FullDepositEvent;
     randomNumber: bigint;
-  }> => {
-    if (!status) {
-      return;
+  } | null> => {
+    if (!status || !pool || !raffleId || !randomNumber) {
+      return null;
     }
 
     if (status !== 2) {
       console.error('Raffle is not finished');
-      return;
+      return null;
     }
 
     const luckyNumber = randomNumber % pool;
 
     const userDeposits = await fetchDeposits({ raffleId });
 
-    const winnerDepositData = userDeposits.reduce((acc, data) => {
-      return data.deposit.point < luckyNumber ? data : acc;
-    }, null);
+    let winnerDepositData = null;
+    for (let i = 0; i < userDeposits.length; i++) {
+      if (userDeposits[i].deposit.point < luckyNumber) {
+        winnerDepositData = userDeposits[i];
+        break;
+      }
+    }
+
+    if (!winnerDepositData) {
+      console.error('Winner not found');
+      return null;
+    }
 
     const nextDepositData = (
       await fetchDeposits({
@@ -72,14 +93,13 @@ const useWinner = () => {
     };
   };
 
-  const calculateChance = async (pool: number) => {
+  const calculateChance = async (pool: number): Promise<number> => {
     if (!status) {
-      return;
+      throw new Error('Status is not loaded');
     }
 
     if (status !== 2) {
-      console.error('Raffle is not finished');
-      return;
+      return 0;
     }
 
     const events = await fetchDeposits({ sender: account, raffleId });

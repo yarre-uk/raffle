@@ -3,7 +3,7 @@ import { useBlock, useReadContract } from 'wagmi';
 import { Card } from '@/components';
 import { proxyAbi, proxyAddress } from '@/constants';
 
-const statuses = {
+const statuses: { [key: number]: string } = {
   0: 'Finished',
   1: 'Started',
   2: 'Ended',
@@ -55,7 +55,9 @@ const GameInfo = () => {
   const timeStamp = Number(blockInfo?.data?.timestamp);
   const endsBy = Number(startedAt) + Number(timeToClose);
 
-  console.log('status ->', status);
+  if (!status || !pool || !startedAt || !timeToClose || !owner) {
+    return null;
+  }
 
   return (
     <Card className="grid w-[80%] grid-cols-2 items-center justify-center p-8">
