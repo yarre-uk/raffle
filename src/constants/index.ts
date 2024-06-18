@@ -6,3 +6,4 @@ export {
   link,
   weth,
 } from './addresses';
+export { proxyContract } from './contracts';

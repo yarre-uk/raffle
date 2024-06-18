@@ -25,7 +25,7 @@ const WithdrawCard = () => {
   const [winnerData, setWinnerData] = useState<{
     winner: FullDepositEvent;
     proof: FullDepositEvent;
-    randomNumber: bigint;
+    luckyNumber: number;
   } | null>(null);
   const [chance, setChance] = useState<number>(0);
 
@@ -47,12 +47,17 @@ const WithdrawCard = () => {
       hash,
     });
 
-  const handleRefetch = () => {
+  const chanceUpdate = async () => {
+    const _chance = await calculateChance();
+    setChance(_chance ?? 0);
+  };
+
+  const handleRefetch = async () => {
     setIsLoading(true);
-    getWinnerData()
-      .then(setWinnerData)
-      .then(() => calculateChance(Number(pool)).then(setChance))
-      .then(() => setIsLoading(false));
+    chanceUpdate();
+    const _winnerData = await getWinnerData();
+    setWinnerData(_winnerData);
+    setIsLoading(false);
   };
 
   const handleDebug = async () => {
@@ -108,7 +113,7 @@ const WithdrawCard = () => {
               winnerData.proof?.deposit.point || pool
             }`}
           </p>
-          <p>Lucky number: {`${winnerData.randomNumber % pool}`}</p>
+          <p>Lucky number: {winnerData.luckyNumber.toString()}</p>
           <>
             {account == winnerData.winner?.deposit.sender ? (
               <p>You are the winner</p>
