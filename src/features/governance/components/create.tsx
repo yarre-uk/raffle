@@ -78,7 +78,7 @@ const CreateCard = () => {
       hash,
     });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const calldatas: `0x${string}`[] = data.items.map((item) => {
       switch (item) {
         case 'setX':
@@ -106,15 +106,19 @@ const CreateCard = () => {
 
     if (calldatas.some((calldata) => calldata === '0x')) {
       throw new Error('Invalid calldata');
-      return;
     }
 
-    writeContract({
-      abi: proxyGovernanceAbi,
-      address: proxyGovernanceAddress,
-      functionName: 'createProposal',
-      args: [calldatas, data.description],
-    });
+    try {
+      const result = await writeContract({
+        abi: proxyGovernanceAbi,
+        address: proxyGovernanceAddress,
+        functionName: 'createProposal',
+        args: [calldatas, data.description],
+      });
+      console.log('Transaction successful:', result);
+    } catch (error) {
+      console.error('Transaction failed:', error);
+    }
   };
 
   return (

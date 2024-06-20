@@ -1161,6 +1161,10 @@ export const proxyGovernanceAbi = [
     type: 'event',
   },
   {
+    stateMutability: 'nonpayable',
+    type: 'fallback',
+  },
+  {
     inputs: [],
     name: 'DEFAULT_ADMIN_ROLE',
     outputs: [
