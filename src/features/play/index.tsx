@@ -4,7 +4,7 @@ import WithdrawCard from './components/withdraw';
 
 import { Card, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components';
 
-const TabsDemo = () => {
+const Play = () => {
   return (
     <Card className="w-full p-4">
       <Tabs
@@ -30,4 +30,4 @@ const TabsDemo = () => {
   );
 };
 
-export default TabsDemo;
+export default Play;

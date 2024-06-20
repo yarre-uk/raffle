@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  BaseError,
   useAccount,
   useReadContract,
   useWaitForTransactionReceipt,
@@ -8,7 +7,7 @@ import {
 } from 'wagmi';
 import { currentChain } from 'wagmiConfig';
 
-import { Button, CardLoader } from '@/components';
+import { Button, CardLoader, TransactionInfo } from '@/components';
 import { proxyAbi, proxyAddress } from '@/constants';
 import useGetDepositEvents from '@/hooks/useGetDepositEvents';
 import useWinner from '@/hooks/useWinner';
@@ -139,12 +138,12 @@ const WithdrawCard = () => {
         Withdraw
       </Button>
 
-      {hash && <div>Transaction Hash: {hash}</div>}
-      {isConfirming && <div>Waiting for confirmation...</div>}
-      {isConfirmed && <div>Transaction confirmed.</div>}
-      {error && (
-        <div>Error: {(error as BaseError).shortMessage || error.message}</div>
-      )}
+      <TransactionInfo
+        error={error}
+        hash={hash}
+        isConfirmed={isConfirmed}
+        isConfirming={isConfirming}
+      />
     </div>
   );
 };

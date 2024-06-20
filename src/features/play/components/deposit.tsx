@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { erc20Abi } from 'viem';
 import {
-  BaseError,
   useAccount,
   usePublicClient,
   useWaitForTransactionReceipt,
@@ -29,6 +28,7 @@ import {
   FormControl,
   RadioGroup,
   RadioGroupItem,
+  TransactionInfo,
 } from '@/components';
 import {
   proxyAbi,
@@ -202,12 +202,12 @@ const DepositCard = () => {
           )}
         />
         <Button type="submit">Submit</Button>
-        {hash && <div>Transaction Hash: {hash}</div>}
-        {isConfirming && <div>Waiting for confirmation...</div>}
-        {isConfirmed && <div>Transaction confirmed.</div>}
-        {error && (
-          <div>Error: {(error as BaseError).shortMessage || error.message}</div>
-        )}
+        <TransactionInfo
+          error={error}
+          hash={hash}
+          isConfirmed={isConfirmed}
+          isConfirming={isConfirming}
+        />
       </form>
     </Form>
   );
