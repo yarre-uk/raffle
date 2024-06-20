@@ -37,3 +37,4 @@ export { default as Layout } from './layout';
 export { Loader, CardLoader } from './loader';
 export { default as TransactionInfo } from './transaction';
 export { Checkbox } from './checkbox';
+export { Textarea } from './textarea';

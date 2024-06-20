@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Textarea,
   TransactionInfo,
 } from '@/components';
 import { proxyGovernanceAbi, proxyRaffleAbi } from '@/constants/abi';
@@ -41,15 +42,10 @@ const formSchema = z.object({
       message: 'You have to select at least one item.',
     })
     .transform((value) => value.filter((item) => item !== '')),
-  x: z.coerce
-    .number()
-    .positive({ message: 'Amount must be a positive number' }),
-  y: z.coerce
-    .number()
-    .positive({ message: 'Amount must be a positive number' }),
-  z: z.coerce
-    .number()
-    .positive({ message: 'Amount must be a positive number' }),
+  x: z.coerce.number().optional(),
+  y: z.coerce.number().optional(),
+  z: z.coerce.number().optional(),
+  description: z.string().min(1, { message: 'Description is required' }),
 });
 
 const encodeParams = (
@@ -66,7 +62,13 @@ const encodeParams = (
 const CreateCard = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { items: [''] } as z.infer<typeof formSchema>,
+    defaultValues: {
+      items: [],
+      description: '',
+      x: 0,
+      y: 0,
+      z: 0,
+    } as z.infer<typeof formSchema>,
   });
 
   const { data: hash, error, writeContract } = useWriteContract();
@@ -80,21 +82,38 @@ const CreateCard = () => {
     const calldatas: `0x${string}`[] = data.items.map((item) => {
       switch (item) {
         case 'setX':
+          if (data.x === undefined) {
+            form.setError('x', { message: 'Amount X is required' });
+            return '0x';
+          }
           return encodeParams('setX', data.x);
         case 'setY':
+          if (data.y === undefined) {
+            form.setError('y', { message: 'Amount Y is required' });
+            return '0x';
+          }
           return encodeParams('setY', data.y);
         case 'setZ':
+          if (data.z === undefined) {
+            form.setError('z', { message: 'Amount Z is required' });
+            return '0x';
+          }
           return encodeParams('setZ', data.z);
         default:
           throw new Error('Invalid item');
       }
     });
 
-    return writeContract({
+    if (calldatas.some((calldata) => calldata === '0x')) {
+      throw new Error('Invalid calldata');
+      return;
+    }
+
+    writeContract({
       abi: proxyGovernanceAbi,
       address: proxyGovernanceAddress,
       functionName: 'createProposal',
-      args: [calldatas, ''],
+      args: [calldatas, data.description],
     });
   };
 
@@ -156,7 +175,12 @@ const CreateCard = () => {
               render={({ field }) => (
                 <FormItem className="h-16">
                   <FormLabel>Amount X</FormLabel>
-                  <Input type="number" {...field} />
+                  <Input
+                    type="number"
+                    {...field}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -168,7 +192,12 @@ const CreateCard = () => {
               render={({ field }) => (
                 <FormItem className="h-16">
                   <FormLabel>Amount Y</FormLabel>
-                  <Input type="number" {...field} />
+                  <Input
+                    type="number"
+                    {...field}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -180,13 +209,30 @@ const CreateCard = () => {
               render={({ field }) => (
                 <FormItem className="h-16">
                   <FormLabel>Amount Z</FormLabel>
-                  <Input type="number" {...field} />
+                  <Input
+                    type="number"
+                    {...field}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
         </div>
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <Textarea {...field} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button type="submit">Submit</Button>
         <TransactionInfo
