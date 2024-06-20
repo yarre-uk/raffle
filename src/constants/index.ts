@@ -7,3 +7,4 @@ export {
   weth,
 } from './addresses';
 export { proxyContract } from './contracts';
+export { ROUTE } from './routes';

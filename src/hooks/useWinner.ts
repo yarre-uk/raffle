@@ -86,10 +86,6 @@ const useWinner = () => {
 
     const [_, pool, status, raffleId] = data.map((item) => Number(item.result));
 
-    if (!status) {
-      throw new Error('Status is not loaded');
-    }
-
     if (status !== 2) {
       return 0;
     }

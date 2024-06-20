@@ -1,23 +1,27 @@
+import { Route, Routes } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 
-import { Card } from './components';
-import { GameInfo, Play, Profile } from './features';
+import { Layout } from './components';
+import { ROUTE } from './constants';
+import { GovernancePage, HomePage, PlayPage } from './pages';
 
 const App = () => {
   const { isConnected } = useAccount();
 
   return (
-    <div className="max-w-screen flex min-h-screen flex-col items-center justify-center gap-4 py-4">
-      <Card className="flex min-h-[60%] w-[80%] flex-col items-center justify-center gap-12 p-8">
-        <Profile />
+    <Routes>
+      <Route path={ROUTE.HOME} element={<Layout />}>
+        <Route index element={<HomePage />} />
         {isConnected && (
           <>
-            <Play />
+            <Route path={ROUTE.PLAY} element={<PlayPage />} />
+            <Route path={ROUTE.GOVERNANCE} element={<GovernancePage />} />
           </>
         )}
-      </Card>
-      {isConnected && <GameInfo />}
-    </div>
+
+        <Route path="*" element={<div>404</div>} />
+      </Route>
+    </Routes>
   );
 };
 

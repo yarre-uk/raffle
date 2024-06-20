@@ -1,6 +1,6 @@
 import { useBlock, useReadContract } from 'wagmi';
 
-import { Card } from '@/components';
+import { Card, CardLoader } from '@/components';
 import { proxyAbi, proxyAddress } from '@/constants';
 
 const statuses: { [key: number]: string } = {
@@ -36,12 +36,6 @@ const GameInfo = () => {
     functionName: 'timeToClose',
   });
 
-  const { data: owner } = useReadContract({
-    abi: proxyAbi,
-    address: proxyAddress,
-    functionName: 'owner',
-  });
-
   if (
     !blockInfo ||
     status == undefined ||
@@ -55,16 +49,21 @@ const GameInfo = () => {
   const timeStamp = Number(blockInfo?.data?.timestamp);
   const endsBy = Number(startedAt) + Number(timeToClose);
 
-  if (!status || !pool || !startedAt || !timeToClose || !owner) {
-    return null;
+  if (
+    status == undefined ||
+    pool == undefined ||
+    startedAt == undefined ||
+    timeToClose == undefined ||
+    !blockInfo
+  ) {
+    return <CardLoader />;
   }
 
   return (
-    <Card className="grid w-[80%] grid-cols-2 items-center justify-center p-8">
+    <Card className="grid grid-cols-2 items-center justify-center p-8">
       <div className="flex flex-col items-center justify-center">
         <p>Contact status: {statuses[status]}</p>
         <p>Pool: {`${pool}`}</p>
-        <p>Owner: {`${owner}`}</p>
       </div>
       <div className="flex flex-col items-center justify-center">
         <p>

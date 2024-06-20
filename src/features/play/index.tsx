@@ -6,20 +6,23 @@ import { Card, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components';
 
 const TabsDemo = () => {
   return (
-    <Card className="p-4">
-      <Tabs defaultValue="deposit" className="w-[600px]">
+    <Card className="w-full p-4">
+      <Tabs
+        defaultValue="deposit"
+        className="flex w-[95%] flex-col items-center justify-center"
+      >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="deposit">Deposit</TabsTrigger>
           <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
           <TabsTrigger value="approve">Approve</TabsTrigger>
         </TabsList>
-        <TabsContent value="deposit">
+        <TabsContent className="w-full" value="deposit">
           <DepositCard />
         </TabsContent>
-        <TabsContent value="withdraw">
+        <TabsContent className="w-full" value="withdraw">
           <WithdrawCard />
         </TabsContent>
-        <TabsContent value="approve">
+        <TabsContent className="w-full" value="approve">
           <ApproveCard />
         </TabsContent>
       </Tabs>

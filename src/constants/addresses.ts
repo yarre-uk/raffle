@@ -10,4 +10,4 @@ export const approvedTokensInfo = [
 
 //TODO move to env
 export const proxyAddress: `0x${string}` =
-  '0x029eA2C522E88A82FDeb881D9cd3576c30eC3F38';
+  '0x91a850f3B8F0B8deA7C4aaEE8481025db35c57F0';

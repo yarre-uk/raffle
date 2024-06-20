@@ -8,7 +8,7 @@ import {
 } from 'wagmi';
 import { currentChain } from 'wagmiConfig';
 
-import { Button } from '@/components';
+import { Button, CardLoader } from '@/components';
 import { proxyAbi, proxyAddress } from '@/constants';
 import useGetDepositEvents from '@/hooks/useGetDepositEvents';
 import useWinner from '@/hooks/useWinner';
@@ -96,13 +96,12 @@ const WithdrawCard = () => {
     handleRefetch();
   }, []);
 
-  if (isLoading || !pool) {
-    return <div>Loading...</div>;
+  if (isLoading || pool == undefined) {
+    return <CardLoader />;
   }
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <p>Withdraw</p>
       {winnerData && (
         <>
           <p>Winner: {winnerData.winner?.deposit.sender}</p>
@@ -123,7 +122,7 @@ const WithdrawCard = () => {
           </>
         </>
       )}
-      {chance && <p>Chance: {chance.toFixed(3)}%</p>}
+      {chance != undefined && <p>Chance: {chance.toFixed(3)}%</p>}
       <Button className="w-full" onClick={handleRefetch}>
         Refetch Data
       </Button>
