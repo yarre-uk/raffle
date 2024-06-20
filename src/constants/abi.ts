@@ -1,4 +1,4 @@
-export const proxyAbi = [
+export const proxyRaffleAbi = [
   {
     inputs: [
       {

@@ -8,6 +8,13 @@ export const approvedTokensInfo = [
   { address: link, name: 'LINK', id: 1 },
 ];
 
-//TODO move to env
-export const proxyAddress: `0x${string}` =
-  '0x91a850f3B8F0B8deA7C4aaEE8481025db35c57F0';
+export const proxyRaffleAddress: `0x${string}` = import.meta.env
+  .VITE_PROXY_RAFFLE_CONTRACT_ADDRESS;
+export const proxyGovernanceAddress: `0x${string}` = import.meta.env
+  .VITE_PROXY_GOVERNANCE_CONTRACT_ADDRESS;
+export const governanceTokenAddress: `0x${string}` = import.meta.env
+  .VITE_GOVERNANCE_TOKEN_CONTRACT_ADDRESS;
+
+if (!proxyRaffleAddress || !proxyGovernanceAddress || !governanceTokenAddress) {
+  throw new Error('Proxy contract addresses are not set');
+}

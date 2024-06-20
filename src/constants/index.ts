@@ -1,6 +1,6 @@
-export { proxyAbi } from './abi';
+export { proxyRaffleAbi as proxyAbi } from './abi';
 export {
-  proxyAddress,
+  proxyRaffleAddress as proxyAddress,
   approvedTokens,
   approvedTokensInfo,
   link,
