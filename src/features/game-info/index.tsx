@@ -1,7 +1,7 @@
 import { useBlock, useReadContract } from 'wagmi';
 
 import { Card, CardLoader } from '@/components';
-import { proxyAbi, proxyAddress } from '@/constants';
+import { proxyRaffleAbi, proxyRaffleAddress } from '@/constants';
 
 const statuses: { [key: number]: string } = {
   0: 'Finished',
@@ -13,26 +13,26 @@ const GameInfo = () => {
   const blockInfo = useBlock();
 
   const { data: status } = useReadContract({
-    abi: proxyAbi,
-    address: proxyAddress,
+    abi: proxyRaffleAbi,
+    address: proxyRaffleAddress,
     functionName: 'status',
   });
 
   const { data: pool } = useReadContract({
-    abi: proxyAbi,
-    address: proxyAddress,
+    abi: proxyRaffleAbi,
+    address: proxyRaffleAddress,
     functionName: 'pool',
   });
 
   const { data: startedAt } = useReadContract({
-    abi: proxyAbi,
-    address: proxyAddress,
+    abi: proxyRaffleAbi,
+    address: proxyRaffleAddress,
     functionName: 'startedAt',
   });
 
   const { data: timeToClose } = useReadContract({
-    abi: proxyAbi,
-    address: proxyAddress,
+    abi: proxyRaffleAbi,
+    address: proxyRaffleAddress,
     functionName: 'timeToClose',
   });
 

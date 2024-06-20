@@ -1,6 +1,6 @@
-import { proxyAbi, proxyAddress } from '.';
+import { proxyRaffleAbi, proxyRaffleAddress } from '.';
 
 export const proxyContract = {
-  address: proxyAddress,
-  abi: proxyAbi,
+  address: proxyRaffleAddress,
+  abi: proxyRaffleAbi,
 } as const;

@@ -3,7 +3,7 @@ import { parseAbiItem, decodeEventLog } from 'viem';
 import { usePublicClient } from 'wagmi';
 import { wagmiConfig } from 'wagmiConfig';
 
-import { proxyAddress, proxyAbi } from '@/constants';
+import { proxyRaffleAddress, proxyRaffleAbi } from '@/constants';
 import { DepositData, DepositEvent, FullDepositEvent } from '@/types';
 
 const useGetDepositEvents = () => {
@@ -20,7 +20,7 @@ const useGetDepositEvents = () => {
 
     const block = await publicClient.getBlock();
     const logs = await publicClient.getLogs({
-      address: proxyAddress,
+      address: proxyRaffleAddress,
       event: parseAbiItem(
         `event Deposited(uint256 indexed raffleId, address indexed sender, bytes32 indexed prevDeposit, bytes32 id)`,
       ),
@@ -32,14 +32,14 @@ const useGetDepositEvents = () => {
     const events: DepositEvent[] = logs.map(
       (log) =>
         decodeEventLog({
-          abi: proxyAbi,
+          abi: proxyRaffleAbi,
           ...log,
         }).args,
     );
 
     const deposits = (await readContract(wagmiConfig, {
-      abi: proxyAbi,
-      address: proxyAddress,
+      abi: proxyRaffleAbi,
+      address: proxyRaffleAddress,
       functionName: 'getDeposits',
       args: [events.map((event) => event.id)],
     })) as DepositData[];

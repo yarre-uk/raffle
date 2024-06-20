@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { encodeFunctionData } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { z } from 'zod';
 
@@ -15,6 +16,8 @@ import {
   Input,
   TransactionInfo,
 } from '@/components';
+import { proxyGovernanceAbi, proxyRaffleAbi } from '@/constants/abi';
+import { proxyGovernanceAddress } from '@/constants/addresses';
 
 const items = [
   {
@@ -49,13 +52,24 @@ const formSchema = z.object({
     .positive({ message: 'Amount must be a positive number' }),
 });
 
-const DepositCard = () => {
+const encodeParams = (
+  functionName: 'setX' | 'setY' | 'setZ',
+  amount: number,
+) => {
+  return encodeFunctionData({
+    abi: proxyRaffleAbi,
+    functionName,
+    args: [BigInt(amount)],
+  });
+};
+
+const CreateCard = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { items: [''] } as z.infer<typeof formSchema>,
   });
 
-  const { data: hash, error } = useWriteContract();
+  const { data: hash, error, writeContract } = useWriteContract();
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
@@ -63,7 +77,25 @@ const DepositCard = () => {
     });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    const calldatas: `0x${string}`[] = data.items.map((item) => {
+      switch (item) {
+        case 'setX':
+          return encodeParams('setX', data.x);
+        case 'setY':
+          return encodeParams('setY', data.y);
+        case 'setZ':
+          return encodeParams('setZ', data.z);
+        default:
+          throw new Error('Invalid item');
+      }
+    });
+
+    return writeContract({
+      abi: proxyGovernanceAbi,
+      address: proxyGovernanceAddress,
+      functionName: 'createProposal',
+      args: [calldatas, ''],
+    });
   };
 
   return (
@@ -117,7 +149,6 @@ const DepositCard = () => {
           />
 
           <div className="col-span-2 flex h-full flex-col justify-evenly">
-            {' '}
             <FormField
               control={form.control}
               name="x"
@@ -169,4 +200,4 @@ const DepositCard = () => {
   );
 };
 
-export default DepositCard;
+export default CreateCard;

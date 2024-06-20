@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { erc20Abi } from 'viem';
 import {
-  BaseError,
   useAccount,
   useWaitForTransactionReceipt,
   useWriteContract,
@@ -29,7 +28,11 @@ import {
   FormItem,
   TransactionInfo,
 } from '@/components';
-import { approvedTokens, approvedTokensInfo, proxyAddress } from '@/constants';
+import {
+  approvedTokens,
+  approvedTokensInfo,
+  proxyRaffleAddress,
+} from '@/constants';
 
 const formSchema = z.object({
   token: z.string().min(1, { message: 'Please select a token' }),
@@ -60,7 +63,7 @@ const ApproveCard = () => {
       address: approvedTokens[+data.token],
       abi: erc20Abi,
       functionName: 'approve',
-      args: [proxyAddress, BigInt(data.amount)],
+      args: [proxyRaffleAddress, BigInt(data.amount)],
       chain: currentChain,
       account: address,
     });
