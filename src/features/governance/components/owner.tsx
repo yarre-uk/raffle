@@ -27,10 +27,10 @@ const OwnerCard = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <p>Proposals:</p>
       <Button onClick={handleFetchProposal}>Refetch</Button>
-      <ProposalList data={data} mode="vote" />
+      {data?.length > 0 ? <ProposalList data={data} mode="view" /> : null}
     </div>
   );
 };

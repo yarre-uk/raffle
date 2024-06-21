@@ -8,7 +8,7 @@ import { proxyGovernanceAbi, proxyGovernanceAddress } from '@/constants';
 import useGetProposalEvents from '@/hooks/useGetProposalEvents';
 import { FullProposalEvent } from '@/types';
 
-const ProcessCard = () => {
+const ProcessedCard = () => {
   const { fetchProposal } = useGetProposalEvents();
   const [data, setData] = useState<FullProposalEvent[] | null>();
   const [isLoading, setIsLoading] = useState(false);
@@ -24,11 +24,7 @@ const ProcessCard = () => {
     setIsLoading(true);
     const proposals = await fetchProposal({});
     const filteredProposals = proposals.filter(
-      (proposal) =>
-        proposal.proposal.state == 0 &&
-        proposal.proposal.votingStartedAt !== 0n &&
-        proposal.proposal.votingStartedAt + (blocksBeforeExecution ?? 0n) <
-          (blockData?.number ?? 0n),
+      (proposal) => proposal.proposal.state !== 0,
     );
     setData(filteredProposals);
     setIsLoading(false);
@@ -44,11 +40,11 @@ const ProcessCard = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <p>Proposals ready for execution:</p>
+      <p>Processed proposals:</p>
       <Button onClick={handleFetchProposal}>Refetch</Button>
-      {data?.length > 0 ? <ProposalList data={data} mode="process" /> : null}
+      {data?.length > 0 ? <ProposalList data={data} mode="view" /> : null}
     </div>
   );
 };
 
-export default ProcessCard;
+export default ProcessedCard;

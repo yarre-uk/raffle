@@ -5,7 +5,7 @@ export type ProposalEvent = {
 
 export type ProposalData = {
   sender: `0x${string}`;
-  calldatas: string[];
+  calldatas: `0x${string}`[];
   proposedAt: bigint;
   description: string;
   votingStartedAt: bigint;

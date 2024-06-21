@@ -42,10 +42,10 @@ const VoteCard = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <p>Proposals ready for voting:</p>
       <Button onClick={handleFetchProposal}>Refetch</Button>
-      <ProposalList data={data} mode="vote" />
+      {data?.length > 0 ? <ProposalList data={data} mode="vote" /> : null}
     </div>
   );
 };

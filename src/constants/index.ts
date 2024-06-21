@@ -9,3 +9,4 @@ export {
 } from './addresses';
 export { proxyContract } from './contracts';
 export { ROUTE } from './routes';
+export { EXECUTER_ROLE } from './roles';

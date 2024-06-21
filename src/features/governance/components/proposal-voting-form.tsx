@@ -20,7 +20,7 @@ const ProposalVotingForm = ({ id }: { id: `0x${string}` }) => {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col gap-4">
       <Button onClick={() => handleVote('for')}>Vote For</Button>
       <Button onClick={() => handleVote('against')}>Vote Against</Button>
       <TransactionInfo
