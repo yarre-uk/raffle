@@ -1,6 +1,7 @@
 export { proxyRaffleAbi, proxyGovernanceAbi } from './abi';
 export {
   proxyRaffleAddress,
+  proxyGovernanceAddress,
   approvedTokens,
   approvedTokensInfo,
   link,

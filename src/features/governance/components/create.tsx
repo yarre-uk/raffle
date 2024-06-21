@@ -108,17 +108,12 @@ const CreateCard = () => {
       throw new Error('Invalid calldata');
     }
 
-    try {
-      const result = await writeContract({
-        abi: proxyGovernanceAbi,
-        address: proxyGovernanceAddress,
-        functionName: 'createProposal',
-        args: [calldatas, data.description],
-      });
-      console.log('Transaction successful:', result);
-    } catch (error) {
-      console.error('Transaction failed:', error);
-    }
+    writeContract({
+      abi: proxyGovernanceAbi,
+      address: proxyGovernanceAddress,
+      functionName: 'createProposal',
+      args: [calldatas, data.description],
+    });
   };
 
   return (

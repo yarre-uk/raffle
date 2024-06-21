@@ -1161,10 +1161,6 @@ export const proxyGovernanceAbi = [
     type: 'event',
   },
   {
-    stateMutability: 'nonpayable',
-    type: 'fallback',
-  },
-  {
     inputs: [],
     name: 'DEFAULT_ADMIN_ROLE',
     outputs: [
@@ -1244,7 +1240,7 @@ export const proxyGovernanceAbi = [
     inputs: [
       {
         internalType: 'bytes32',
-        name: 'id',
+        name: '_id',
         type: 'bytes32',
       },
     ],
@@ -1296,6 +1292,67 @@ export const proxyGovernanceAbi = [
         internalType: 'struct Proposal',
         name: 'proposal',
         type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32[]',
+        name: '_ids',
+        type: 'bytes32[]',
+      },
+    ],
+    name: 'getProposals',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'sender',
+            type: 'address',
+          },
+          {
+            internalType: 'bytes[]',
+            name: 'calldatas',
+            type: 'bytes[]',
+          },
+          {
+            internalType: 'uint256',
+            name: 'proposedAt',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'description',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'votingStartedAt',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'forVotes',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'againstVotes',
+            type: 'uint256',
+          },
+          {
+            internalType: 'enum ProposalState',
+            name: 'state',
+            type: 'uint8',
+          },
+        ],
+        internalType: 'struct Proposal[]',
+        name: '',
+        type: 'tuple[]',
       },
     ],
     stateMutability: 'view',

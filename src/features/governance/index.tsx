@@ -9,7 +9,7 @@ const Governance = () => {
     <Card className="w-full p-4">
       <Tabs
         defaultValue="create"
-        className="flex w-[95%] flex-col items-center justify-center"
+        className="mx-auto flex w-full flex-col items-center justify-center"
       >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="create">Create</TabsTrigger>
