@@ -1,12 +1,35 @@
-import { Form } from 'react-router-dom';
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+
+import { Button, TransactionInfo } from '@/components';
+import { proxyGovernanceAbi, proxyGovernanceAddress } from '@/constants';
 
 const ProposalVotingForm = ({ id }: { id: `0x${string}` }) => {
+  const { data: hash, error, writeContract } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+
+  const handleVote = async (vote: 'for' | 'against') => {
+    writeContract({
+      abi: proxyGovernanceAbi,
+      address: proxyGovernanceAddress,
+      functionName: 'voteForProposal',
+      args: [id, vote === 'for'],
+    });
+  };
+
   return (
-    <Form>
-      <div>
-        <p>{id}</p>
-      </div>
-    </Form>
+    <div className="flex gap-4">
+      <Button onClick={() => handleVote('for')}>Vote For</Button>
+      <Button onClick={() => handleVote('against')}>Vote Against</Button>
+      <TransactionInfo
+        hash={hash}
+        isConfirmed={isConfirmed}
+        isConfirming={isConfirming}
+        error={error}
+      />
+    </div>
   );
 };
 

@@ -1,9 +1,24 @@
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
-import { Card } from '@/components';
+import ProposalVotingForm from './proposal-voting-form';
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Card,
+} from '@/components';
 import { FullProposalEvent } from '@/types';
 
-const VoteProposalList = ({ data }: { data: FullProposalEvent[] }) => {
+type Mode = 'vote' | 'process';
+
+const ProposalList = ({
+  data, // mode,
+}: {
+  data: FullProposalEvent[];
+  mode: Mode;
+}) => {
   return (
     <Card className="flex flex-col p-6">
       {data.map((proposal) => (
@@ -17,10 +32,18 @@ const VoteProposalList = ({ data }: { data: FullProposalEvent[] }) => {
             {proposal.proposal.againstVotes.toString()}{' '}
             {<ArrowDown className="inline" />}
           </span>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Want to vote?</AccordionTrigger>
+              <AccordionContent>
+                <ProposalVotingForm id={proposal.event.id} />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Card>
       ))}
     </Card>
   );
 };
 
-export default VoteProposalList;
+export default ProposalList;

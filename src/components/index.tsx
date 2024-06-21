@@ -38,3 +38,9 @@ export { Loader, CardLoader } from './loader';
 export { default as TransactionInfo } from './transaction';
 export { Checkbox } from './checkbox';
 export { Textarea } from './textarea';
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from './accordion';
