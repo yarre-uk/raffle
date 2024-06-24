@@ -3,16 +3,15 @@ import { parseAbiItem, decodeEventLog } from 'viem';
 import { usePublicClient } from 'wagmi';
 import { wagmiConfig } from 'wagmiConfig';
 
-import { proxyGovernanceAbi } from '@/constants';
-import { proxyGovernanceAddress } from '@/constants/addresses';
-import { FullProposalEvent, ProposalData, ProposalEvent } from '@/types';
+import { proxyGovernanceAbi, proxyGovernanceAddress } from '@/constants';
+import { FullProposalEvent, ProposalData, ProposalEvent, bytes } from '@/types';
 
 const useGetProposalEvents = () => {
   const publicClient = usePublicClient();
 
   const fetchProposal = async (args: {
-    id?: `0x${string}` | `0x${string}`[] | null | undefined;
-    sender?: `0x${string}` | `0x${string}`[] | null | undefined;
+    id?: bytes | bytes[] | null | undefined;
+    sender?: bytes | bytes[] | null | undefined;
   }): Promise<FullProposalEvent[]> => {
     if (!publicClient) {
       throw new Error('Public client not initialized');

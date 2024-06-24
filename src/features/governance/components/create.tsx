@@ -17,8 +17,12 @@ import {
   Textarea,
   TransactionInfo,
 } from '@/components';
-import { proxyGovernanceAbi, proxyRaffleAbi } from '@/constants/abi';
-import { proxyGovernanceAddress } from '@/constants/addresses';
+import {
+  proxyGovernanceAddress,
+  proxyGovernanceAbi,
+  proxyRaffleAbi,
+} from '@/constants';
+import { bytes } from '@/types';
 
 const items = [
   {
@@ -80,7 +84,7 @@ const CreateCard = () => {
     });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const calldatas: `0x${string}`[] = data.items.map((item) => {
+    const calldatas: bytes[] = data.items.map((item) => {
       switch (item) {
         case 'setX':
           if (data.x === undefined) {

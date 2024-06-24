@@ -4,6 +4,7 @@ import { usePublicClient } from 'wagmi';
 import { wagmiConfig } from 'wagmiConfig';
 
 import { proxyRaffleAddress, proxyRaffleAbi } from '@/constants';
+import { bytes } from '@/types';
 import { DepositData, DepositEvent, FullDepositEvent } from '@/types';
 
 const useGetDepositEvents = () => {
@@ -11,8 +12,8 @@ const useGetDepositEvents = () => {
 
   const fetchDeposits = async (args: {
     raffleId?: bigint | bigint[];
-    sender?: `0x${string}` | `0x${string}`[];
-    prevDeposit?: `0x${string}` | `0x${string}`[];
+    sender?: bytes | bytes[];
+    prevDeposit?: bytes | bytes[];
   }): Promise<FullDepositEvent[]> => {
     if (!publicClient) {
       throw new Error('Public client not initialized');

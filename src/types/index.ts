@@ -4,3 +4,4 @@ export type {
   ProposalData,
   ProposalEvent,
 } from './proposal';
+export type { bytes } from './shared';

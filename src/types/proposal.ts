@@ -1,11 +1,13 @@
+import { bytes } from '@/types';
+
 export type ProposalEvent = {
-  id: `0x${string}`;
-  sender: `0x${string}`;
+  id: bytes;
+  sender: bytes;
 };
 
 export type ProposalData = {
-  sender: `0x${string}`;
-  calldatas: `0x${string}`[];
+  sender: bytes;
+  calldatas: bytes[];
   proposedAt: bigint;
   description: string;
   votingStartedAt: bigint;

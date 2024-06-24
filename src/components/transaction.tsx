@@ -2,8 +2,10 @@ import { WriteContractErrorType } from '@wagmi/core';
 import { memo } from 'react';
 import { BaseError } from 'wagmi';
 
+import { bytes } from '@/types';
+
 type TransactionInfoProps = {
-  hash: `0x${string}` | undefined;
+  hash: bytes | undefined;
   isConfirming: boolean;
   isConfirmed: boolean;
   error: WriteContractErrorType | null;

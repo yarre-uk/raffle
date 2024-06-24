@@ -2,8 +2,9 @@ import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { Button, TransactionInfo } from '@/components';
 import { proxyGovernanceAbi, proxyGovernanceAddress } from '@/constants';
+import { bytes } from '@/types';
 
-const ProposalVotingForm = ({ id }: { id: `0x${string}` }) => {
+const ProposalVotingForm = ({ id }: { id: bytes }) => {
   const { data: hash, error, writeContract } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({

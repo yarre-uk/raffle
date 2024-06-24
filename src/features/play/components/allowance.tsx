@@ -2,13 +2,14 @@ import { erc20Abi } from 'viem';
 import { useReadContract } from 'wagmi';
 
 import { approvedTokens, proxyRaffleAddress } from '@/constants';
+import { bytes } from '@/types';
 
 const Allowance = ({
   tokenId,
   address,
 }: {
   tokenId: number;
-  address: `0x${string}`;
+  address: bytes;
 }) => {
   const { data: allowance } = useReadContract({
     abi: erc20Abi,

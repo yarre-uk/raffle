@@ -1,16 +1,18 @@
+import { bytes } from '@/types';
+
 export type DepositEvent = {
   raffleId: bigint;
-  sender: `0x${string}`;
-  prevDeposit: `0x${string}`;
-  id: `0x${string}`;
+  sender: bytes;
+  prevDeposit: bytes;
+  id: bytes;
 };
 
 export type DepositData = {
   raffleId: bigint;
-  sender: `0x${string}`;
+  sender: bytes;
   amount: bigint;
   point: bigint;
-  prevDeposit: `0x${string}`;
+  prevDeposit: bytes;
 };
 
 export type FullDepositEvent = { event: DepositEvent; deposit: DepositData };

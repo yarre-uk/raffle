@@ -22,12 +22,11 @@ import {
   proxyGovernanceAddress,
   proxyRaffleAbi,
 } from '@/constants';
-import { FullProposalEvent } from '@/types';
-import { bytes } from '@/types/shared';
+import { FullProposalEvent, bytes } from '@/types';
 
 type Mode = 'vote' | 'process' | 'view';
 
-const decodeCalldata = (data: `0x${string}`) => {
+const decodeCalldata = (data: bytes) => {
   const decoded = decodeFunctionData({ abi: proxyRaffleAbi, data });
 
   return `${decoded.functionName}(${decoded.args.join(', ')})`;
