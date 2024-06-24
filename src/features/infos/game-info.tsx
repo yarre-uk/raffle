@@ -57,14 +57,15 @@ const GameInfo = () => {
   const endsBy = startedAt + timeToClose;
 
   return (
-    <Card className="grid grid-cols-2 items-center justify-center p-8">
+    <Card className="grid w-full grid-cols-2 items-center justify-center p-8">
       <div className="flex flex-col items-center justify-center">
         <p>Contact status: {statuses[status]}</p>
         <p>Pool: {`${pool}`}</p>
       </div>
       <div className="flex flex-col items-center justify-center">
         <p>
-          Able to deposit: {timeStamp < endsBy && status !== 2 ? 'Yes' : 'No'}
+          Able to deposit:{' '}
+          {(endsBy > timeStamp && status !== 2) || status !== 2 ? 'Yes' : 'No'}
         </p>
         <p>
           Ends by:{' '}

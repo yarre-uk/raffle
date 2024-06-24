@@ -53,13 +53,17 @@ const useWinner = () => {
 
     const userDeposits = await fetchDeposits({ raffleId: BigInt(raffleId) });
 
-    let winnerDepositData = null;
-    for (let i = 0; i < userDeposits.length; i++) {
-      if (userDeposits[i].deposit.point < luckyNumber) {
-        winnerDepositData = userDeposits[i];
+    let i = 0;
+    for (; i < userDeposits.length; i++) {
+      if (
+        userDeposits[i].deposit.point < luckyNumber &&
+        userDeposits[i].deposit.point + userDeposits[i].deposit.amount >=
+          luckyNumber
+      ) {
         break;
       }
     }
+    const winnerDepositData = userDeposits[i];
 
     if (!winnerDepositData) {
       console.error('Winner not found');
