@@ -12,9 +12,12 @@ export const proxyRaffleAddress: `0x${string}` = import.meta.env
   .VITE_PROXY_RAFFLE_CONTRACT_ADDRESS;
 export const proxyGovernanceAddress: `0x${string}` = import.meta.env
   .VITE_PROXY_GOVERNANCE_CONTRACT_ADDRESS;
-export const governanceTokenAddress: `0x${string}` = import.meta.env
-  .VITE_GOVERNANCE_TOKEN_CONTRACT_ADDRESS;
 
-if (!proxyRaffleAddress || !proxyGovernanceAddress || !governanceTokenAddress) {
+console.log('proxyRaffleAddress ->', proxyRaffleAddress);
+console.log('proxyGovernanceAddress ->', proxyGovernanceAddress);
+
+if (!proxyRaffleAddress || !proxyGovernanceAddress) {
+  console.log('proxyRaffleAddress ->', proxyRaffleAddress);
+  console.log('proxyGovernanceAddress ->', proxyGovernanceAddress);
   throw new Error('Proxy contract addresses are not set');
 }

@@ -7,14 +7,7 @@ import ProcessCard from './components/process';
 import ProcessedCard from './components/processed';
 import VoteCard from './components/vote';
 
-import {
-  Card,
-  Separator,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components';
+import { Card, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components';
 import {
   EXECUTER_ROLE,
   proxyGovernanceAbi,
@@ -76,12 +69,8 @@ const Governance = () => {
           )}
         </Tabs>
       </Card>
-      <Separator />
-      <Card className="w-full p-4">
+      <Card className="flex w-full flex-col gap-16 p-4">
         <AllCard />
-      </Card>
-      <Separator />
-      <Card className="w-full p-4">
         <ProcessedCard />
       </Card>
     </>
