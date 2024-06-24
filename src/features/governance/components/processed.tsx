@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useBlock, useReadContract } from 'wagmi';
+import { useBlockNumber } from 'wagmi';
 
 import ProposalList from './proposal-list';
 
 import { Button, CardLoader } from '@/components';
-import { proxyGovernanceAbi, proxyGovernanceAddress } from '@/constants';
 import useGetProposalEvents from '@/hooks/useGetProposalEvents';
 import { FullProposalEvent } from '@/types';
 
@@ -12,13 +11,7 @@ const ProcessedCard = () => {
   const { fetchProposal } = useGetProposalEvents();
   const [data, setData] = useState<FullProposalEvent[] | null>();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: blockData } = useBlock();
-
-  const { data: blocksBeforeExecution } = useReadContract({
-    abi: proxyGovernanceAbi,
-    address: proxyGovernanceAddress,
-    functionName: 'blocksBeforeExecution',
-  });
+  const { data: blockNumber } = useBlockNumber({ watch: true });
 
   const handleFetchProposal = async () => {
     setIsLoading(true);
@@ -31,8 +24,10 @@ const ProcessedCard = () => {
   };
 
   useEffect(() => {
-    handleFetchProposal();
-  }, [blockData, blocksBeforeExecution]);
+    if (blockNumber) {
+      handleFetchProposal();
+    }
+  }, [blockNumber]);
 
   if (isLoading || !data) {
     return <CardLoader />;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBlock } from 'wagmi';
+import { useBlockNumber } from 'wagmi';
 
 import ProposalList from './proposal-list';
 
@@ -11,7 +11,7 @@ const AllCard = () => {
   const { fetchProposal } = useGetProposalEvents();
   const [data, setData] = useState<FullProposalEvent[] | null>();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: blockData } = useBlock();
+  const { data: blockNumber } = useBlockNumber({ watch: true });
 
   const handleFetchProposal = async () => {
     setIsLoading(true);
@@ -20,8 +20,10 @@ const AllCard = () => {
   };
 
   useEffect(() => {
-    handleFetchProposal();
-  }, [blockData]);
+    if (blockNumber) {
+      handleFetchProposal();
+    }
+  }, [blockNumber]);
 
   if (isLoading || !data) {
     return <CardLoader />;

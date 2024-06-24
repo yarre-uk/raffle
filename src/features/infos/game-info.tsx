@@ -1,7 +1,8 @@
-import { useBlock, useReadContract } from 'wagmi';
+import { useEffect } from 'react';
+import { useBlock, useBlockNumber, useReadContracts } from 'wagmi';
 
 import { Card, CardLoader } from '@/components';
-import { proxyRaffleAbi, proxyRaffleAddress } from '@/constants';
+import { proxyContract } from '@/constants';
 
 const statuses: { [key: number]: string } = {
   0: 'Finished',
@@ -11,53 +12,49 @@ const statuses: { [key: number]: string } = {
 
 const GameInfo = () => {
   const blockInfo = useBlock();
+  const { data: blockNumber } = useBlockNumber({ watch: true });
 
-  const { data: status } = useReadContract({
-    abi: proxyRaffleAbi,
-    address: proxyRaffleAddress,
-    functionName: 'status',
+  const { data, refetch, isLoading, isError, isSuccess } = useReadContracts({
+    contracts: [
+      {
+        ...proxyContract,
+        functionName: 'status',
+      },
+      {
+        ...proxyContract,
+        functionName: 'pool',
+      },
+      {
+        ...proxyContract,
+        functionName: 'startedAt',
+      },
+      {
+        ...proxyContract,
+        functionName: 'timeToClose',
+      },
+    ],
   });
 
-  const { data: pool } = useReadContract({
-    abi: proxyRaffleAbi,
-    address: proxyRaffleAddress,
-    functionName: 'pool',
-  });
-
-  const { data: startedAt } = useReadContract({
-    abi: proxyRaffleAbi,
-    address: proxyRaffleAddress,
-    functionName: 'startedAt',
-  });
-
-  const { data: timeToClose } = useReadContract({
-    abi: proxyRaffleAbi,
-    address: proxyRaffleAddress,
-    functionName: 'timeToClose',
-  });
+  useEffect(() => {
+    refetch();
+  }, [blockNumber]);
 
   if (
-    !blockInfo ||
-    status == undefined ||
-    pool == undefined ||
-    startedAt == undefined ||
-    timeToClose == undefined
-  ) {
-    return null;
-  }
-
-  const timeStamp = Number(blockInfo?.data?.timestamp);
-  const endsBy = Number(startedAt) + Number(timeToClose);
-
-  if (
-    status == undefined ||
-    pool == undefined ||
-    startedAt == undefined ||
-    timeToClose == undefined ||
-    !blockInfo
+    isLoading ||
+    isError ||
+    !isSuccess ||
+    !data ||
+    data.some((data) => data.result === undefined)
   ) {
     return <CardLoader />;
   }
+
+  const [status, pool, startedAt, timeToClose] = data.map((data) =>
+    Number(data.result),
+  );
+
+  const timeStamp = Number(blockInfo?.data?.timestamp);
+  const endsBy = startedAt + timeToClose;
 
   return (
     <Card className="grid grid-cols-2 items-center justify-center p-8">
@@ -67,10 +64,7 @@ const GameInfo = () => {
       </div>
       <div className="flex flex-col items-center justify-center">
         <p>
-          Able to deposit:{' '}
-          {startedAt + BigInt(endsBy) < timeStamp || status !== 2
-            ? 'Yes'
-            : 'No'}
+          Able to deposit: {timeStamp < endsBy && status !== 2 ? 'Yes' : 'No'}
         </p>
         <p>
           Ends by:{' '}

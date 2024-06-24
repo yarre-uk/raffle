@@ -1,41 +1,53 @@
-import { useBlock, useReadContract } from 'wagmi';
+import { useEffect } from 'react';
+import { useBlockNumber, useReadContracts } from 'wagmi';
 
 import { Card, CardLoader } from '@/components';
-import { proxyRaffleAbi, proxyRaffleAddress } from '@/constants';
+import { proxyContract } from '@/constants';
 
 const GovernanceInfo = () => {
-  const blockInfo = useBlock();
+  const { data: blockNumber } = useBlockNumber({ watch: true });
 
-  const { data: x } = useReadContract({
-    abi: proxyRaffleAbi,
-    address: proxyRaffleAddress,
-    functionName: 'X',
+  const { data, refetch, isLoading, isError, isSuccess } = useReadContracts({
+    contracts: [
+      {
+        ...proxyContract,
+        functionName: 'X',
+      },
+      {
+        ...proxyContract,
+        functionName: 'Y',
+      },
+      {
+        ...proxyContract,
+        functionName: 'Z',
+      },
+    ],
   });
 
-  const { data: y } = useReadContract({
-    abi: proxyRaffleAbi,
-    address: proxyRaffleAddress,
-    functionName: 'Y',
-  });
+  useEffect(() => {
+    refetch();
+  }, [blockNumber]);
 
-  const { data: z } = useReadContract({
-    abi: proxyRaffleAbi,
-    address: proxyRaffleAddress,
-    functionName: 'Z',
-  });
-
-  if (x == undefined || y == undefined || z == undefined || !blockInfo) {
+  if (
+    isLoading ||
+    isError ||
+    !isSuccess ||
+    !data ||
+    data.some((data) => data.result === undefined)
+  ) {
     return <CardLoader />;
   }
+
+  const [x, y, z] = data.map((data) => Number(data.result));
 
   return (
     <Card className="flex w-full flex-col items-center justify-center gap-4 p-4">
       <div className="flex w-full flex-row items-center justify-center gap-4">
-        <p>X - {x.toString()}</p>
-        <p>Y - {y.toString()}</p>
-        <p>Z - {z.toString()}</p>
+        <p>X - {x}</p>
+        <p>Y - {y}</p>
+        <p>Z - {z}</p>
       </div>
-      <p>Block number: {blockInfo.data?.number.toString()}</p>
+      <p>Block number: {blockNumber?.toString()}</p>
     </Card>
   );
 };

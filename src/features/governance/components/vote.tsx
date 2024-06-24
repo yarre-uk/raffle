@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBlock, useReadContract } from 'wagmi';
+import { useBlockNumber, useReadContract } from 'wagmi';
 
 import ProposalList from './proposal-list';
 
@@ -12,7 +12,7 @@ const VoteCard = () => {
   const { fetchProposal } = useGetProposalEvents();
   const [data, setData] = useState<FullProposalEvent[] | null>();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: blockData } = useBlock();
+  const { data: blockNumber } = useBlockNumber({ watch: true });
 
   const { data: blocksBeforeVoting } = useReadContract({
     abi: proxyGovernanceAbi,
@@ -33,9 +33,9 @@ const VoteCard = () => {
       (proposal) =>
         proposal.proposal.state == 0 &&
         proposal.proposal.proposedAt + (blocksBeforeVoting ?? 0n) <
-          (blockData?.number ?? 0n) &&
+          (blockNumber ?? 0n) &&
         (proposal.proposal.votingStartedAt + (blocksBeforeExecution ?? 0n) >
-          (blockData?.number ?? 0n) ||
+          (blockNumber ?? 0n) ||
           proposal.proposal.votingStartedAt === 0n),
     );
     setData(filteredProposals);
@@ -43,8 +43,10 @@ const VoteCard = () => {
   };
 
   useEffect(() => {
-    handleFetchProposal();
-  }, [blockData, blocksBeforeVoting]);
+    if (blockNumber) {
+      handleFetchProposal();
+    }
+  }, [blockNumber, blocksBeforeVoting, blocksBeforeExecution]);
 
   if (isLoading || !data) {
     return <CardLoader />;
