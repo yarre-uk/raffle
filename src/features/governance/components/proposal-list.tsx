@@ -1,6 +1,10 @@
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { decodeFunctionData } from 'viem';
-import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi';
 
 import ProposalVotingForm from './proposal-voting-form';
 
@@ -42,6 +46,8 @@ const ProposalList = ({
   data: FullProposalEvent[];
   mode: Mode;
 }) => {
+  const { address } = useAccount();
+
   const { data: hash, error, writeContract } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
@@ -66,7 +72,11 @@ const ProposalList = ({
         >
           <p>Id: {proposal.event.id}</p>
           <p>Proposer: {proposal.event.sender}</p>
-          <p>Description {proposal.proposal.description}</p>
+          <p>Description: {proposal.proposal.description}</p>
+          <p>Proposed at: {proposal.proposal.proposedAt.toString()}</p>
+          <p>
+            Voting started at: {proposal.proposal.votingStartedAt.toString()}
+          </p>
           <span>
             Votes: {<ArrowUp className="inline text-green-700" />}{' '}
             {proposal.proposal.forVotes.toString()} -{' '}
@@ -81,7 +91,7 @@ const ProposalList = ({
               </li>
             ))}
           </ol>
-          {mode === 'vote' && (
+          {mode === 'vote' && proposal.event.sender != address ? (
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
                 <AccordionTrigger>Want to vote?</AccordionTrigger>
@@ -90,7 +100,7 @@ const ProposalList = ({
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          )}
+          ) : null}
           {mode === 'process' && (
             <>
               <Button

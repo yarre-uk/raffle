@@ -69,6 +69,7 @@ const CreateCard = () => {
       y: 0,
       z: 0,
     } as z.infer<typeof formSchema>,
+    mode: 'onChange',
   });
 
   const { data: hash, error, writeContract } = useWriteContract();

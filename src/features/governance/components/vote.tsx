@@ -20,6 +20,12 @@ const VoteCard = () => {
     functionName: 'blocksBeforeVoting',
   });
 
+  const { data: blocksBeforeExecution } = useReadContract({
+    abi: proxyGovernanceAbi,
+    address: proxyGovernanceAddress,
+    functionName: 'blocksBeforeExecution',
+  });
+
   const handleFetchProposal = async () => {
     setIsLoading(true);
     const proposals = await fetchProposal({});
@@ -27,7 +33,10 @@ const VoteCard = () => {
       (proposal) =>
         proposal.proposal.state == 0 &&
         proposal.proposal.proposedAt + (blocksBeforeVoting ?? 0n) <
-          (blockData?.number ?? 0n),
+          (blockData?.number ?? 0n) &&
+        (proposal.proposal.votingStartedAt + (blocksBeforeExecution ?? 0n) >
+          (blockData?.number ?? 0n) ||
+          proposal.proposal.votingStartedAt === 0n),
     );
     setData(filteredProposals);
     setIsLoading(false);

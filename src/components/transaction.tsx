@@ -1,4 +1,5 @@
 import { WriteContractErrorType } from '@wagmi/core';
+import { memo } from 'react';
 import { BaseError } from 'wagmi';
 
 type TransactionInfoProps = {
@@ -26,4 +27,4 @@ const TransactionInfo = ({
   );
 };
 
-export default TransactionInfo;
+export default memo(TransactionInfo);

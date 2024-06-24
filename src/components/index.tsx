@@ -44,3 +44,4 @@ export {
   AccordionTrigger,
   AccordionContent,
 } from './accordion';
+export { Separator } from './separator';
