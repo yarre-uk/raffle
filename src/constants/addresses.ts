@@ -13,9 +13,6 @@ export const proxyRaffleAddress: `0x${string}` = import.meta.env
 export const proxyGovernanceAddress: `0x${string}` = import.meta.env
   .VITE_PROXY_GOVERNANCE_CONTRACT_ADDRESS;
 
-console.log('proxyRaffleAddress ->', proxyRaffleAddress);
-console.log('proxyGovernanceAddress ->', proxyGovernanceAddress);
-
 if (!proxyRaffleAddress || !proxyGovernanceAddress) {
   console.log('proxyRaffleAddress ->', proxyRaffleAddress);
   console.log('proxyGovernanceAddress ->', proxyGovernanceAddress);
