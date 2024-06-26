@@ -51,6 +51,7 @@ const ApproveCard = () => {
       token: '',
       amount: 0,
     } as z.infer<typeof formSchema>,
+    mode: 'onChange',
   });
 
   const { address } = useAccount();
@@ -78,25 +79,24 @@ const ApproveCard = () => {
         return;
       }
 
-      const allowance = await readContract(wagmiConfig, {
+      const allowance = readContract(wagmiConfig, {
         abi: erc20Abi,
         address: approvedTokens[+form.getValues().token],
         functionName: 'allowance',
         args: [address, proxyRaffleAddress],
       });
 
-      setAllowance(Number(allowance));
-
-      const balance = await readContract(wagmiConfig, {
+      const balance = readContract(wagmiConfig, {
         abi: erc20Abi,
         address: approvedTokens[+form.getValues().token],
         functionName: 'balanceOf',
         args: [address],
       });
 
-      setBalance(Number(balance));
+      setAllowance(Number(await allowance));
+      setBalance(Number(await balance));
     })();
-  }, [address, form]);
+  }, [address, form.getValues().token]);
 
   return (
     <Form {...form}>
