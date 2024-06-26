@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { readContract } from '@wagmi/core';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { erc20Abi } from 'viem';
 import {
@@ -6,10 +8,8 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
-import { currentChain } from 'wagmiConfig';
+import { currentChain, wagmiConfig } from 'wagmiConfig';
 import { z } from 'zod';
-
-import Allowance from './allowance';
 
 import {
   Button,
@@ -42,6 +42,9 @@ const formSchema = z.object({
 });
 
 const ApproveCard = () => {
+  const [allowance, setAllowance] = useState<number>(0);
+  const [balance, setBalance] = useState<number>(0);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,6 +71,32 @@ const ApproveCard = () => {
       account: address,
     });
   };
+
+  useEffect(() => {
+    (async () => {
+      if (!address) {
+        return;
+      }
+
+      const allowance = await readContract(wagmiConfig, {
+        abi: erc20Abi,
+        address: approvedTokens[+form.getValues().token],
+        functionName: 'allowance',
+        args: [address, proxyRaffleAddress],
+      });
+
+      setAllowance(Number(allowance));
+
+      const balance = await readContract(wagmiConfig, {
+        abi: erc20Abi,
+        address: approvedTokens[+form.getValues().token],
+        functionName: 'balanceOf',
+        args: [address],
+      });
+
+      setBalance(Number(balance));
+    })();
+  }, [address, form]);
 
   return (
     <Form {...form}>
@@ -117,7 +146,10 @@ const ApproveCard = () => {
         />
         <Button type="submit">Submit</Button>
         {address && (
-          <Allowance tokenId={+form.getValues().token} address={address} />
+          <>
+            <p>Allowance: {allowance}</p>
+            <p>Balance: {balance}</p>
+          </>
         )}
         <TransactionInfo
           error={error}
